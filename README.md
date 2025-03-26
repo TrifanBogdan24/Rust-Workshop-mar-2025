@@ -101,8 +101,26 @@ Using **PWM**, I managed to play the entire **solfège scale** (**Do-Re-Mi-Fa-So
 
 # Useful links
 
-
 - [Rasberry Pi Pico pins layout](https://rust.ipworkshop.ro/assets/images/pico2w-pinout-49532ea10ab0caedc6a6f21d1bf504bf.svg)
 - [Board](https://rust.ipworkshop.ro/assets/images/lab_board-3fa09dc706781d6e6c7126212ca9d240.png)
 - [Rust Workshop - embassy](https://rust.ipworkshop.ro/docs/embassy)
 - [PM Rust](https://pmrust.pages.upb.ro/)
+
+
+# How to use this repo
+
+1. **Hardware Setup**:
+  use **jumper wires** to connect Rasberry Pi's pins
+  to the corresponding pins of your desired component
+2. Connect the board to your personal computer via **USB**
+3. **Flash the program**:
+  to execute a specific task,
+  run the corresponding command from the root folder of this repository
+
+
+| Task | CLI command to flash |
+| :--- | :--- |
+| **Task 0**: Make an LED blink | `cargo run --bin demo` |
+| **Task 1**: Detect when buttons are pressed | `cargo run --bin hi` |
+| **Task 3**: Sing my own tune | `cargo run --bin sing` |
+
