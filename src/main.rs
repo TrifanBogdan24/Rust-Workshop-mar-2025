@@ -1,9 +1,13 @@
-use axum::routing::get;
+pub mod routes;
+
+use axum;
 
 #[tokio::main]
 async fn main() {
-    let app = axum::Router::new().route("/", get(async || "Hello, World!"));
-
     let listener = tokio::net::TcpListener::bind("0.0.0.0:8080").await.unwrap();
-    axum::serve(listener, app).await.unwrap();
+    println!(
+        "Server running on http://{}",
+        listener.local_addr().unwrap()
+    );
+    axum::serve(listener, routes::app()).await.unwrap();
 }
