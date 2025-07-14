@@ -1,4 +1,4 @@
-# [⚒️ Embassy workshop](https://rust.ipworkshop.ro/docs/embassy)
+# [⚒️ Embassy | Rust Workshop](https://rust.ipworkshop.ro/docs/embassy)
 
 ![PMRust Lab logo](https://gitlab.cs.pub.ro/pmrust/pmrust.pages.upb.ro/-/raw/main/website/static/img/logo.svg?ref_type=heads)
 
