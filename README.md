@@ -3,16 +3,28 @@
 
 
 
-API:
-- <http://0.0.0.0:8080/>
-- <http://0.0.0.0:8080/healthcheck>
-- <http://0.0.0.0:8080/metrics>
-- <http://0.0.0.0:8080/metrics/system>
-- <http://0.0.0.0:8080/metrics/process>
-- <http://0.0.0.0:8080/metrics/memory>
-- <http://0.0.0.0:8080/metrics/cpu>
-- <http://0.0.0.0:8080/metrics/summary>
+```sh
+cargo run
+```
 
+API:
+- Task 1 (healhcheck)
+    - <http://localhost:8080/>
+    - <http://localhost:8080/healthcheck>
+- Task 2 (metrics)
+    - <http://localhost:8080/metrics>
+    - <http://localhost:8080/metrics/system>
+    - <http://localhost:8080/metrics/process>
+    - <http://localhost:8080/metrics/memory>
+    - <http://localhost:8080/metrics/cpu>
+    - <http://localhost:8080/metrics/summary>
+- Task 3 (Real-Time)
+    - <http://localhost:8080/realtime>
+    - <http://localhost:8080/realtime/summary>
+    - <http://localhost:8080/realtime/system>
+    - <http://localhost:8080/realtime/process>
+    - <http://localhost:8080/realtime/memory>
+    - <http://localhost:8080/realtime/cpu>
 
 
 Rust Crates:

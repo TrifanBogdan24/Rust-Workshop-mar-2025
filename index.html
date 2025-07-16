@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Real-Time Axum Metrics</title>
+<style>
+  body {
+    font-family: monospace, monospace;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 20px;
+  }
+  pre {
+    background: #2d2d2d;
+    padding: 15px;
+    border-radius: 6px;
+    overflow-x: auto;
+  }
+</style>
+</head>
+<body>
+  <h1>Real-Time Metrics from Axum SSE</h1>
+  <pre id="metrics">Connecting...</pre>
+
+  <script>
+    const metricsElem = document.getElementById('metrics');
+
+    // Connect to the SSE endpoint
+    const eventSource = new EventSource('http://localhost:8080/realtime');
+
+    eventSource.onmessage = event => {
+      try {
+        // Parse JSON data from server
+        const data = JSON.parse(event.data);
+        // Pretty-print JSON inside <pre>
+        metricsElem.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        metricsElem.textContent = 'Error parsing JSON: ' + err;
+      }
+    };
+
+    eventSource.onerror = err => {
+      metricsElem.textContent = 'Connection error or closed.';
+      eventSource.close();
+    };
+  </script>
+</body>
+</html>
