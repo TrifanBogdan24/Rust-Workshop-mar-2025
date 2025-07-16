@@ -1,6 +1,9 @@
-pub mod routes;
-
 use axum;
+
+
+pub mod routes;
+mod metrics;
+
 
 #[tokio::main]
 async fn main() {

@@ -5,5 +5,6 @@ pub fn register() -> Router {
 }
 
 async fn health_check() -> impl IntoResponse {
+    // Task 1: implement function
     (StatusCode::OK, "Server is running")
 }
