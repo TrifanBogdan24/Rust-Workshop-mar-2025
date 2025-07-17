@@ -1,5 +1,5 @@
 
-# [Tauri | Rust Workshop](https://rust.ipworkshop.ro/docs/tauri)
+# [Tauri Desktop Applications | Rust Workshop](https://rust.ipworkshop.ro/docs/tauri)
 
 
 Install **Node.js** with **npm** in Linux:
