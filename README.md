@@ -2,11 +2,30 @@
 # [Tauri Desktop Applications | Rust Workshop](https://rust.ipworkshop.ro/docs/tauri)
 
 
+## Instalare NPM
+
 Install **Node.js** with **npm** in Linux:
 ```sh
 sudo apt install npm nodejs
 ```
 
+
+## Troubleshoot instalare NPM
+
+In cazul in care versiunea pe care `npm` o instalareaza este veche (mai veche decat Node 14+),
+ruleaza:
+
+
+```sh
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+source ~/.bashrc    # sau ~/.zshrc, dupa caz
+nvm install 18
+nvm use 18
+```
+
+
+
+## Creare template Tauri
 
 
 Run the following command to create a new Tauri project with Vite and TypeScript:
@@ -35,4 +54,13 @@ For Desktop development, run:
 For Android development, run:
   deno task tauri android dev
 
+```
+
+
+## Pornirea aplicatiei Tauri
+
+
+```sh
+npm install
+npm run tauri dev
 ```
