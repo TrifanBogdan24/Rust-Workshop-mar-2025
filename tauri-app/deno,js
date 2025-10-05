@@ -1,0 +1,8 @@
+{
+    "tasks": {
+        "tauri": "cargo tauri"
+    },
+    "imports": {
+        "@tauri-apps/api": "npm:@tauri-apps/api@latest"
+    }
+}
