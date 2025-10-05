@@ -39,10 +39,22 @@ cargo install tauri-cli
 ```
 
 
+## Dependinte suplimentare pentru `deno`
+
 Din directorul `tauri-app`, ruleaza:
 
 ```sh
 deno task tauri add dialog
+```
+
+## Deploy pe un alt sistem Linux
+
+```sh
 deno task tauri build      # compileaza
+```
+
+## GUI
+
+```sh
 deno task tauri dev        # Porneste GUI-ul
 ```
