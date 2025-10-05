@@ -1,43 +1,53 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="/src/styles.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tauri App</title>
-    <script type="module" src="/src/main.ts" defer></script>
+    <title>Tauri Text Editor</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background: #1e1e1e;
+        color: white;
+        gap: 1rem;
+      }
+      textarea {
+        width: 80%;
+        height: 60vh;
+        background: #2b2b2b;
+        color: white;
+        border: none;
+        padding: 1rem;
+        resize: none;
+        font-family: monospace;
+        font-size: 1rem;
+        border-radius: 8px;
+      }
+      button {
+        padding: 0.6rem 1.2rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        background: #0078d4;
+        color: white;
+        font-weight: bold;
+      }
+      button:hover {
+        background: #005ea2;
+      }
+    </style>
   </head>
-
   <body>
-    <main class="container">
-      <h1>Welcome to Tauri</h1>
-
-      <div class="row">
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/src/assets/vite.svg" class="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img
-            src="/src/assets/tauri.svg"
-            class="logo tauri"
-            alt="Tauri logo"
-          />
-        </a>
-        <a href="https://www.typescriptlang.org/docs" target="_blank">
-          <img
-            src="/src/assets/typescript.svg"
-            class="logo typescript"
-            alt="typescript logo"
-          />
-        </a>
-      </div>
-      <p>Click on the Tauri logo to learn more about the framework</p>
-
-      <form class="row" id="greet-form">
-        <input id="greet-input" placeholder="Enter a name..." />
-        <button type="submit">Greet</button>
-      </form>
-      <p id="greet-msg"></p>
-    </main>
+    <h1>🦀 Tauri Text Editor</h1>
+    <div>
+      <button id="open">Open File</button>
+      <button id="save">Save File</button>
+    </div>
+    <textarea id="editor" placeholder="Start typing..."></textarea>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

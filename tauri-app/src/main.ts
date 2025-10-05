@@ -1,22 +1,32 @@
+import { open, save } from "@tauri-apps/plugin-dialog";
 import { invoke } from "@tauri-apps/api/core";
 
-let greetInputEl: HTMLInputElement | null;
-let greetMsgEl: HTMLElement | null;
+const editor = document.querySelector<HTMLTextAreaElement>("#editor")!;
+const openBtn = document.querySelector<HTMLButtonElement>("#open")!;
+const saveBtn = document.querySelector<HTMLButtonElement>("#save")!;
 
-async function greet() {
-  if (greetMsgEl && greetInputEl) {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    greetMsgEl.textContent = await invoke("greet", {
-      name: greetInputEl.value,
-    });
+let currentPath: string | null = null;
+
+// Open file
+openBtn.addEventListener("click", async () => {
+  const selected = await open({ multiple: false });
+  if (selected && typeof selected === "string") {
+    currentPath = selected;
+    const contents = await invoke<string>("read_file", { path: currentPath });
+    editor.value = contents;
   }
-}
+});
 
-window.addEventListener("DOMContentLoaded", () => {
-  greetInputEl = document.querySelector("#greet-input");
-  greetMsgEl = document.querySelector("#greet-msg");
-  document.querySelector("#greet-form")?.addEventListener("submit", (e) => {
-    e.preventDefault();
-    greet();
-  });
+// Save file
+saveBtn.addEventListener("click", async () => {
+  if (!currentPath) {
+    currentPath = await save({});
+  }
+  if (currentPath) {
+    await invoke("write_file", {
+      path: currentPath,
+      contents: editor.value,
+    });
+    alert("File saved!");
+  }
 });
