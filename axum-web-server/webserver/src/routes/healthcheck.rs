@@ -2,10 +2,16 @@ use axum::{
     Router,
     http::StatusCode,
     response::IntoResponse,
-    routing::get
+    routing::get,
+    extract::State
 };
 
-pub fn register() -> Router {
+use std::sync::Arc;
+use tokio::sync::RwLock;
+
+use crate::AppState;
+
+pub fn register() -> Router<Arc<RwLock<AppState>>> {
     Router::new().route("/", get(health_check))
 }
 
@@ -17,7 +23,9 @@ pub fn register() -> Router {
     ),
     tag = "Healthcheck"
 )]
-async fn health_check() -> impl IntoResponse {
+async fn health_check(
+    State(_state): State<Arc<RwLock<AppState>>>
+) -> impl IntoResponse {
     // Task 1: implement function
     (StatusCode::OK, "Server is running")
 }

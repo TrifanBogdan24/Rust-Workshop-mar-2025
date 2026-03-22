@@ -41,13 +41,13 @@ impl Kind {
 }
 
 // Task 2: add derive
-#[derive(Serialize, Deserialize, ToSchema)]
+#[derive(Serialize, Deserialize, Clone, ToSchema)]
 pub struct System {
-    name: String,
-    kernel_version: String,
-    os_version: String,
-    host_name: String,
-    uptime: u64,
+    pub name: String,
+    pub kernel_version: String,
+    pub os_version: String,
+    pub host_name: String,
+    pub uptime: u64,
 }
 
 impl System {
@@ -65,13 +65,13 @@ impl System {
 }
 
 // Task 2: add derive
-#[derive(Serialize, Deserialize, ToSchema)]
+#[derive(Serialize, Deserialize, Clone, ToSchema)]
 pub struct Process {
-    pid: u32,
-    name: String,
-    memory: u64,
-    cpu_usage: f32,
-    run_time: u64,
+    pub pid: u32,
+    pub name: String,
+    pub memory: u64,
+    pub cpu_usage: f32,
+    pub run_time: u64,
 }
 
 impl Process {
@@ -90,10 +90,10 @@ impl Process {
     }
 }
 
-#[derive(Serialize, Deserialize, ToSchema)]
+#[derive(Serialize, Deserialize, Clone, ToSchema)]
 pub struct Memory {
-    used: u64,
-    total: u64,
+    pub used: u64,
+    pub total: u64,
 }
 
 impl Memory {
@@ -106,18 +106,18 @@ impl Memory {
     }
 }
 
-#[derive(Serialize, Deserialize, ToSchema)]
+#[derive(Serialize, Deserialize, Clone, ToSchema)]
 pub struct CoreMetrics {
-    name: String,
-    brand: String,
-    usage: f32,
-    frequency: u64,
+    pub name: String,
+    pub brand: String,
+    pub usage: f32,
+    pub frequency: u64,
 }
 
-#[derive(Serialize, Deserialize, ToSchema)]
+#[derive(Serialize, Deserialize, Clone, ToSchema)]
 pub struct Cpu {
-    cpu_usage: f32,
-    cores: Vec<CoreMetrics>,
+    pub cpu_usage: f32,
+    pub cores: Vec<CoreMetrics>,
 }
 
 impl Cpu {
@@ -145,12 +145,12 @@ impl Cpu {
     }
 }
 
-#[derive(Serialize, Deserialize, ToSchema)]
+#[derive(Serialize, Deserialize, Clone, ToSchema)]
 pub struct Disk {
-    name: String,
-    available_space: u64,
-    total_space: u64,
-    is_removable: bool,
+    pub name: String,
+    pub available_space: u64,
+    pub total_space: u64,
+    pub is_removable: bool,
 }
 
 impl Disk {
@@ -172,13 +172,13 @@ impl Disk {
     }
 }
 
-#[derive(Serialize, Deserialize, ToSchema)]
+#[derive(Serialize, Deserialize, Clone, ToSchema)]
 pub struct Summary {
-    system: System,
-    process: Vec<Process>,
-    memory: Memory,
-    cpu: Cpu,
-    disk: Vec<Disk>,
+    pub system: System,
+    pub process: Vec<Process>,
+    pub memory: Memory,
+    pub cpu: Cpu,
+    pub disks: Vec<Disk>,
 }
 
 impl Summary {
@@ -189,7 +189,7 @@ impl Summary {
             process: Process::generate(sys),
             memory: Memory::generate(sys),
             cpu: Cpu::generate(sys),
-            disk: Disk::generate(),
+            disks: Disk::generate(),
         }
     }
 }
