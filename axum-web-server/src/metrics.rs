@@ -1,5 +1,7 @@
-use sysinfo::{System as SysinfoSystem, Disks as SysDisks};
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
+use sysinfo::{Disks, System as SystemInfo};
+use utoipa::{ToSchema};
+use serde_json::{json, Value};
 
 pub async fn init() -> sysinfo::System {
     let mut sys = sysinfo::System::new_all();
@@ -11,20 +13,35 @@ pub async fn init() -> sysinfo::System {
     sys
 }
 
+#[derive(Deserialize, ToSchema, Clone)]
+#[serde(rename_all = "lowercase")]
 pub enum Kind {
     System,
     Process,
     Memory,
     Cpu,
     Disk,
+    Summary
 }
 
 
+impl Kind {
+    pub async fn generate_json_response(&self) -> Value {
+        let mut sys = init().await;
 
-
+        match self {
+            Self::System => json!(System::generate()),
+            Self::Process => json!(Process::generate(&mut sys)),
+            Self::Memory => json!(Memory::generate(&mut sys)),
+            Self::Cpu => json!(Cpu::generate(&mut sys)),
+            Self::Disk => json!(Disk::generate()),
+            Self::Summary => json!(Summary::generate(&mut sys)),
+        }
+    }
+}
 
 // Task 2: add derive
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, ToSchema)]
 pub struct System {
     name: String,
     kernel_version: String,
@@ -37,18 +54,18 @@ impl System {
     pub fn generate() -> Self {
         // Task 2: implement function
         Self {
-            name: SysinfoSystem::name().unwrap_or_else(|| "Unknown".to_string()),
-            kernel_version: SysinfoSystem::kernel_version().unwrap_or_else(|| "Unknown".to_string()),
-            os_version: SysinfoSystem::os_version().unwrap_or_else(|| "Unknown".to_string()),
-            host_name: SysinfoSystem::host_name().unwrap_or_else(|| "Unknown".to_string()),
-            uptime: SysinfoSystem::uptime(),
+            name: SystemInfo::name().unwrap_or_else(|| "Unknown".to_string()),
+            kernel_version: SystemInfo::kernel_version()
+                .unwrap_or_else(|| "Unknown".to_string()),
+            os_version: SystemInfo::os_version().unwrap_or_else(|| "Unknown".to_string()),
+            host_name: SystemInfo::host_name().unwrap_or_else(|| "Unknown".to_string()),
+            uptime: SystemInfo::uptime(),
         }
     }
 }
 
-
 // Task 2: add derive
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, ToSchema)]
 pub struct Process {
     pid: u32,
     name: String,
@@ -58,7 +75,7 @@ pub struct Process {
 }
 
 impl Process {
-    pub fn generate(sys: &SysinfoSystem) -> Vec<Self> {
+    pub fn generate(sys: &SystemInfo) -> Vec<Self> {
         // Task 2: implement function
         sys.processes()
             .values()
@@ -73,14 +90,14 @@ impl Process {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, ToSchema)]
 pub struct Memory {
     used: u64,
     total: u64,
 }
 
 impl Memory {
-    pub fn generate(sys: &SysinfoSystem) -> Self {
+    pub fn generate(sys: &SystemInfo) -> Self {
         // Task 2: implement function
         Self {
             used: sys.used_memory(),
@@ -89,7 +106,7 @@ impl Memory {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, ToSchema)]
 pub struct CoreMetrics {
     name: String,
     brand: String,
@@ -97,14 +114,14 @@ pub struct CoreMetrics {
     frequency: u64,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, ToSchema)]
 pub struct Cpu {
     cpu_usage: f32,
     cores: Vec<CoreMetrics>,
 }
 
 impl Cpu {
-    pub fn generate(sys: &SysinfoSystem) -> Self {
+    pub fn generate(sys: &SystemInfo) -> Self {
         // Task 2: implement function
         let cpus = sys.cpus();
         let cores: Vec<CoreMetrics> = cpus
@@ -128,7 +145,7 @@ impl Cpu {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, ToSchema)]
 pub struct Disk {
     name: String,
     available_space: u64,
@@ -140,9 +157,10 @@ impl Disk {
     pub fn generate() -> Vec<Self> {
         // Task 2: implement function
         // Use sysinfo's Disks
-        let sys_disks = SysDisks::new_with_refreshed_list();
+        let disks = Disks::new_with_refreshed_list();
 
-        sys_disks.list()
+        disks
+            .list()
             .iter()
             .map(|disk| Disk {
                 name: disk.name().to_string_lossy().to_string(),
@@ -154,7 +172,7 @@ impl Disk {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, ToSchema)]
 pub struct Summary {
     system: System,
     process: Vec<Process>,
@@ -164,7 +182,7 @@ pub struct Summary {
 }
 
 impl Summary {
-    pub fn generate(sys: &SysinfoSystem) -> Self {
+    pub fn generate(sys: &SystemInfo) -> Self {
         // Task 2: implement function
         Self {
             system: System::generate(),
@@ -175,6 +193,3 @@ impl Summary {
         }
     }
 }
-
-
-

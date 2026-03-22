@@ -1,8 +1,8 @@
 use axum;
 
-
-pub mod routes;
 mod metrics;
+mod routes;
+
 
 
 #[tokio::main]

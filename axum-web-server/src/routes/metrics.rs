@@ -1,12 +1,13 @@
+use crate::metrics;
 use axum::{
     Router,
     extract::Path,
     http::StatusCode,
     response::{IntoResponse, Json},
-    routing::get
+    routing::get,
 };
-use crate::metrics;
-use serde_json::json;
+use serde_json::Value;
+
 
 pub fn register() -> Router {
     Router::new()
@@ -14,6 +15,14 @@ pub fn register() -> Router {
         .route("/{kind}", get(get_metric))
 }
 
+#[utoipa::path(
+    get,
+    path = "/metrics",
+    responses(
+        (status = StatusCode::OK, body = metrics::Summary, description = "Fetch Summary System Metrics"),
+    ),
+    tag = "System Metrics"
+)]
 async fn get_metrics() -> impl IntoResponse {
     // Task 2: implement function
     let mut sys = metrics::init().await;
@@ -22,20 +31,25 @@ async fn get_metrics() -> impl IntoResponse {
     (StatusCode::OK, Json(summary))
 }
 
-async fn get_metric(Path(kind): Path<String>) -> impl IntoResponse {
+
+#[utoipa::path(
+    get,
+    path = "/metrics/{kind}",
+    params(
+        ("kind" = metrics::Kind, Path, description = "Type of metric to retrieve")
+    ),
+    responses(
+        (status = StatusCode::OK, body = metrics::System, description = "Fetch all System Metrics"),
+        (status = StatusCode::OK, body = metrics::Process, description = "Fetch System Processes Metrics"),
+        (status = StatusCode::OK, body = metrics::Memory, description = "Fetch System Memory Metrics"),
+        (status = StatusCode::OK, body = metrics::Cpu, description = "Fetch System CPU Metrics"),
+        (status = StatusCode::OK, body = metrics::Disk, description = "Fetch System Disk Metrics"),
+        (status = StatusCode::OK, body = metrics::Summary, description = "Fetch Summary System Metrics"),
+    ),
+    tag = "System Metrics"
+)]
+async fn get_metric(Path(kind): Path<metrics::Kind>) -> impl IntoResponse {
     // Task 2: implement function
-    let kind = kind.to_lowercase();
-    let mut sys = metrics::init().await;
-
-    let data = match kind.as_str() {
-        "system" => json!(metrics::System::generate()),
-        "process" => json!(metrics::Process::generate(&mut sys)),
-        "memory" => json!(metrics::Memory::generate(&mut sys)),
-        "cpu" => json!(metrics::Cpu::generate(&mut sys)),
-        "disk" => json!(metrics::Disk::generate()),
-        "summary" => json!(metrics::Summary::generate(&mut sys)),
-        _ => return (StatusCode::NOT_FOUND, Json(json!({ "error": "Invalid metric type" }))),
-    };
-
-    (StatusCode::OK, Json(data))
+    let response: Value = kind.generate_json_response().await;
+    (StatusCode::OK, Json(response))
 }
