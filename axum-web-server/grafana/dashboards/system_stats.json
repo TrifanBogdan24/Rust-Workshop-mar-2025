@@ -1,0 +1,117 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "links": [],
+  "panels": [
+    {
+      "title": "CPU Usage per Core (%)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 100,
+          "unit": "percent",
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "fillOpacity": 25,
+            "gradientMode": "opacity",
+            "showPoints": "always",
+            "pointSize": 5
+          }
+        }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "Prometheus" },
+          "expr": "system_cpu_core_usage",
+          "legendFormat": "{{core}}",
+          "interval": "1s"
+        }
+      ],
+      "options": {
+        "legend": { "displayMode": "table", "placement": "bottom", "calcs": ["last", "max"] }
+      }
+    },
+    {
+      "title": "Memory Usage",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "decbytes",
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "fillOpacity": 30,
+            "gradientMode": "opacity",
+            "showPoints": "always",
+            "pointSize": 5
+          }
+        }
+      },
+      "targets": [
+        {
+            "expr": "system_memory_used_bytes",
+            "legendFormat": "Used RAM",
+            "interval": "1s"
+        },
+        {
+            "expr": "system_memory_total_bytes",
+            "legendFormat": "Total RAM",
+            "interval": "1s"
+        }
+      ],
+      "options": {
+        "legend": { "displayMode": "table", "placement": "bottom", "calcs": ["last"] }
+      }
+    },
+    {
+      "title": "Top 10 Processes by CPU",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 8 },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 10,
+            "showPoints": "auto"
+          }
+        }
+      },
+      "targets": [
+        {
+            "expr": "topk(5, system_process_cpu_usage)",
+            "legendFormat": "{{name}} (PID: {{pid}})",
+            "interval": "1s"
+
+        }
+      ],
+      "options": {
+        "legend": { "displayMode": "table", "placement": "right" }
+      }
+    }
+  ],
+  "refresh": "2s",
+  "schemaVersion": 39,
+  "tags": ["rust", "system", "monitoring"],
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "title": "Rust System Monitor",
+  "uid": "rust_system_monitor"
+}
