@@ -4,6 +4,9 @@
 A hands-on **Rust workshop project** where I built a HTTP server using [`Axum`](https://docs.rs/axum/latest),
 exposing **health checks, system metrics and real-time monitoring** of the Operating System.
 
+## Preview
+
+![img](./result-dashboard.png)
 
 ## 📚 Learning Goals
 
