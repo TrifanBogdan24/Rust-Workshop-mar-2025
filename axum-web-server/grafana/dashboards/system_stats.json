@@ -10,7 +10,7 @@
     {
       "title": "CPU Usage per Core (%)",
       "type": "timeseries",
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
       "datasource": { "type": "prometheus", "uid": "Prometheus" },
       "fieldConfig": {
         "defaults": {
@@ -43,7 +43,7 @@
     {
       "title": "Memory Usage",
       "type": "timeseries",
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
       "datasource": { "type": "prometheus", "uid": "Prometheus" },
       "fieldConfig": {
         "defaults": {
@@ -61,14 +61,14 @@
       },
       "targets": [
         {
-            "expr": "system_memory_used_bytes",
-            "legendFormat": "Used RAM",
-            "interval": "1s"
+          "expr": "system_memory_used_bytes",
+          "legendFormat": "Used RAM",
+          "interval": "1s"
         },
         {
-            "expr": "system_memory_total_bytes",
-            "legendFormat": "Total RAM",
-            "interval": "1s"
+          "expr": "system_memory_total_bytes",
+          "legendFormat": "Total RAM",
+          "interval": "1s"
         }
       ],
       "options": {
@@ -78,7 +78,7 @@
     {
       "title": "Top 10 Processes by CPU",
       "type": "timeseries",
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 8 },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 16 },
       "datasource": { "type": "prometheus", "uid": "Prometheus" },
       "fieldConfig": {
         "defaults": {
@@ -94,18 +94,75 @@
       },
       "targets": [
         {
-            "expr": "topk(5, system_process_cpu_usage)",
-            "legendFormat": "{{name}} (PID: {{pid}})",
-            "interval": "1s"
+          "expr": "topk(10, system_process_cpu_usage)",
+          "legendFormat": "{{name}} (PID: {{pid}})",
+          "interval": "1s"
 
         }
       ],
       "options": {
         "legend": { "displayMode": "table", "placement": "right" }
       }
+    },
+    {
+      "title": "CPU Usage",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 0 },
+      "type": "gauge",
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto",
+        "minVizWidth": 75,
+        "minVizHeight": 75
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "interval": "1s",
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "system_cpu_core_usage",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{core}}",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ]
     }
   ],
-  "refresh": "2s",
+  "refresh": "1s",
   "schemaVersion": 39,
   "tags": ["rust", "system", "monitoring"],
   "time": {
